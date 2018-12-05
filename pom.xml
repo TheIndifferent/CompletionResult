@@ -42,7 +42,21 @@
   <version>0.1-SNAPSHOT</version>
 
   <name>CompletionResult</name>
+  <description>CompletionStage and Either combined</description>
   <url>https://github.com/TheIndifferent/CompletionResult</url>
+
+  <licenses>
+    <license>
+      <name>BSD 3-Clause License</name>
+      <url>https://github.com/TheIndifferent/CompletionResult/blob/master/LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <url>https://github.com/TheIndifferent/CompletionResult</url>
+    <connection>scm:git:git@github.com:TheIndifferent/CompletionResult.git</connection>
+  </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
