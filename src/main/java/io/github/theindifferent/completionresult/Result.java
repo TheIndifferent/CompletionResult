@@ -33,141 +33,70 @@ package io.github.theindifferent.completionresult;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.Objects;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
-public abstract class Result<V, E extends Enum<E>> {
+/**
+ * Value class holding either value of the operation, or enum code of error.
+ *
+ * @param <V> the class of the value
+ * @param <E> the enum class of the error
+ */
+public interface Result<V, E extends Enum<E>> {
 
-  public static <V, E extends Enum<E>> Result<V, E> forValue(@NonNull final V value) {
+  /**
+   * Returns a {@code Result} with the specified non-null value.
+   *
+   * @param value value instance to wrap
+   * @param <V> the class of the value
+   * @param <E> the enum class of the error
+   * @return {@code Result} instance holding the specified value instance
+   */
+  static <V, E extends Enum<E>> Result<V, E> forValue(@NonNull final V value) {
     requireNonNull(value);
-    return new ValueResult<>(value);
+    return new ResultValue<>(value);
   }
 
-  public static <V, E extends Enum<E>> Result<V, E> forError(@NonNull final E error) {
+  /**
+   * Returns a {@code Result} with the specified non-null error.
+   *
+   * @param error error code
+   * @param <V> the class of the value
+   * @param <E> the enum class of the error
+   * @return {@code Result} instance holding the specified error
+   */
+  static <V, E extends Enum<E>> Result<V, E> forError(@NonNull final E error) {
     requireNonNull(error);
-    return new ErrorResult<>(error);
+    return new ResultError<>(error);
   }
 
+  /**
+   * Returns the wrapped value instance, never {@code null}.
+   *
+   * @return the value instance, never {@code null}
+   * @throws IllegalStateException if {@code Result} is an error
+   */
   @NonNull
-  public abstract V value();
+  V value() throws IllegalStateException;
 
+  /**
+   * Returns the wrapped error code, never {@code null}.
+   *
+   * @return the error code, never {@code null}
+   * @throws IllegalStateException if {@code Result} is a value
+   */
   @NonNull
-  public abstract E error();
+  E error() throws IllegalStateException;
 
-  public abstract boolean isValue();
+  /**
+   * Returns {@code true} if the {@code Result} contains a value, {@code false} otherwise.
+   * @return {@code true} if the {@code Result} contains a value, {@code false} otherwise
+   */
+  boolean isValue();
 
-  public abstract boolean isError();
+  /**
+   * Returns {@code true} if the {@code Result} contains an error code, {@code false} otherwise.
+   * @return {@code true} if the {@code Result} contains an error code, {@code false} otherwise
+   */
+  boolean isError();
 
-  private static class ValueResult<V, E extends Enum<E>> extends Result<V, E> {
-
-    private final V value;
-
-    ValueResult(final V value) {
-      this.value = value;
-    }
-
-    @NonNull
-    @Override
-    public V value() {
-      return value;
-    }
-
-    @NonNull
-    @Override
-    public E error() {
-      throw new IllegalStateException("Successful result does not have error");
-    }
-
-    @Override
-    public boolean isValue() {
-      return true;
-    }
-
-    @Override
-    public boolean isError() {
-      return false;
-    }
-
-    @Override
-    public boolean equals(@Nullable final Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (o == null || getClass() != o.getClass()) {
-        return false;
-      }
-      final ValueResult<?, ?> that = (ValueResult<?, ?>) o;
-      return Objects.equals(value, that.value);
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(value);
-    }
-
-    @Override
-    public String toString() {
-      return "Result{"
-             + "value="
-             + value
-             + '}';
-    }
-  }
-
-  private static class ErrorResult<V, E extends Enum<E>> extends Result<V, E> {
-
-    private final E error;
-
-    ErrorResult(final E error) {
-      this.error = error;
-    }
-
-    @NonNull
-    @Override
-    public V value() {
-      throw new IllegalStateException("Error result does not have value");
-    }
-
-    @NonNull
-    @Override
-    public E error() {
-      return error;
-    }
-
-    @Override
-    public boolean isValue() {
-      return false;
-    }
-
-    @Override
-    public boolean isError() {
-      return true;
-    }
-
-    @Override
-    public boolean equals(@Nullable final Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (o == null || getClass() != o.getClass()) {
-        return false;
-      }
-      final ErrorResult<?, ?> that = (ErrorResult<?, ?>) o;
-      return Objects.equals(error, that.error);
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(error);
-    }
-
-    @Override
-    public String toString() {
-      return "Result{"
-             + "error="
-             + error
-             + '}';
-    }
-  }
 }

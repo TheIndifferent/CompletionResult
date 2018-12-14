@@ -42,6 +42,19 @@ import java.util.function.Function;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * A promise containing either operation result or error code.
+ *
+ * <p>It is semantically similar to {@code CompletionStage<Either<V, E>}, but allows mapping of values and errors
+ * without the need to unwrap or dereference stages.
+ *
+ * @param <V> the class of the value
+ * @param <E> the enum class of the error
+ *
+ * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletionStage.html">CompletionStage</a>
+ * @see <a href="https://static.javadoc.io/io.vavr/vavr/0.9.2/io/vavr/control/Either.html">Either</a>
+ *
+ */
 public class CompletionResult<V, E extends Enum<E>> {
 
   private final CompletionStage<Result<V, E>> stage;
